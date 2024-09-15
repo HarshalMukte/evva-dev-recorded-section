@@ -1,7 +1,7 @@
 "use client";
 
 import RecordingPopUP from "@/app/components/RecordingPopUP";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 
 // Recording component
@@ -18,6 +18,7 @@ const Recording = () => {
   const [timer, setTimer] = useState<NodeJS.Timeout | null>(null); // Reference to timer
 
   const router = useRouter();
+  const pathname = usePathname();
 
   // Navigate backward
   const handleBack = () => {
@@ -71,7 +72,10 @@ const Recording = () => {
         clearInterval(timer!); // Stop the timer
         setIsRecording(false);
         // Logic to handle finishing the recording
-        console.log("Finish recording");
+        console.log("complete" + pathname);
+        
+        const newPath = pathname.replace("/recording", "/uploading");
+        router.push(newPath); // Navigate to the uploading page  
       },
       noAction: () => setShowPopUp(false),
     });
@@ -97,20 +101,26 @@ const Recording = () => {
   return (
     <div className="relative w-full max-w-[600px] mx-auto h-[100vh] h-[100dvh] text-[#ffffff] flex flex-col justify-between">
       {/* Gradient background */}
-      <div className="fixed bg-[#0F0817] -z-10 inset-0 w-full h-[100%] bg-transparent overflow-hidden">
+      <div className="fixed bg-[#0F0817] -z-10 inset-0 w-full h-[100%] overflow-hidden">
         <span className="absolute top-[-5%] right-[-6%] w-[45%] rounded-full aspect-square bg-[#7265E34D] blur-lg shadow-[0_0_100px_50px_#7265E34D]" />
         <span className="absolute bottom-[-5%] left-[-6%] w-[45%] rounded-full aspect-square bg-[#7265E34D] blur-lg shadow-[0_0_100px_50px_#7265E34D]" />
       </div>
 
       {/* Header */}
       <div className="relative z-10 w-full flex items-center gap-5 p-4 bg-transparent text-inherit">
-        <button onClick={handleBack} className="w-[40px] h-[40px] cursor-pointer bg-[#ffffff64] rounded-[10px] flex items-center justify-center">
+        <button
+          onClick={handleBack}
+          className="w-[40px] h-[40px] cursor-pointer bg-[#ffffff64] rounded-[10px] flex items-center justify-center"
+        >
           <img src="/images/leftArrowWhite.svg" alt="icon" />
         </button>
         <h1 className="text-center font-semibold text-base mx-auto">
           Visit with Dr.Smith
         </h1>
-        <button onClick={handleBack} className="w-[40px] h-[40px] cursor-pointer bg-[#ffffff64] rounded-[10px] flex items-center justify-center">
+        <button
+          onClick={handleBack}
+          className="w-[40px] h-[40px] cursor-pointer bg-[#ffffff64] rounded-[10px] flex items-center justify-center"
+        >
           <img src="/images/removeWhite.svg" alt="icon" />
         </button>
       </div>
